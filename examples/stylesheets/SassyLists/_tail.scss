@@ -1,17 +1,18 @@
 // Returns the tail of `$list`: all items except the first (head)
-// ---
+//
 // @ignore Documentation: http://sassylists.com/documentation/#tail
-// ---
+//
 // @requires slice
-// ---
+//
 // @param {List} $list - list to retrieve tail from
-// ---
-// @returns {List | Bool}
+//
+// @return {List | Bool}
 
 @function tail($list) {
   @return slice($list, 2);
 }
 
+// @requires tail
 // @alias tail
 
 @function rest($list) {

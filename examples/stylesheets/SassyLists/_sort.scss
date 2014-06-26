@@ -1,13 +1,13 @@
 // Sorts values of `$list` using quick-sort algorithm respecting `$order`
-// ---
+//
 // @ignore Documentation: http://sassylists.com/documentation/#sort
-// ---
+//
 // @requires str-compare
-// ---
+//
 // @param {List} $list  - list to sort
 // @param {List} $order - order to respect
-// ---
-// @returns {List}
+//
+// @return {List}
 
 @function sort($list, $order: "!" "#" "$" "%" "&" "'" "(" ")" "*" "+" "," "-" "." "/" "[" "\\" "]" "^" "_" "{" "|" "}" "~" "0" "1" "2" "3" "4" "5" "6" "7" "8" "9" "a" "b" "c" "d" "e" "f" "g" "h" "i" "j" "k" "l" "m" "n" "o" "p" "q" "r" "s" "t" "u" "v" "w" "x" "y" "z") {
   $less:  ();
@@ -33,6 +33,7 @@
   @return $list;
 }
 
+// @requires sort
 // @alias sort
 
 @function order($list) {

@@ -1,17 +1,18 @@
 // Checks whether `$list` is symmetrical (one-level deep)
-// ---
+//
 // @ignore Documentation: http://sassylists.com/documentation/#is-symmetrical
-// ---
+//
 // @requires reverse
-// ---
+//
 // @param {List} $list - list to check
-// ---
-// @returns {Bool}
+//
+// @return {Bool}
 
 @function is-symmetrical($list) {
   @return $list == reverse($list);
 }
 
+// @requires is-symmetrical
 // @alias is-symmetrical
 
 @function is-mirror($list) {

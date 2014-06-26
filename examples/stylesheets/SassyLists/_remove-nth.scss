@@ -1,18 +1,19 @@
 // Removes value from `$list` at index `$index`
-// ---
+//
 // @ignore Documentation: http://sassylists.com/documentation/#remove-nth
-// ---
+//
 // @requires replace-nth
-// ---
+//
 // @param {List}   $list  - list to remove value from
 // @param {Number} $index - index to remove
-// ---
-// @returns {List | Bool}
+//
+// @return {List | Bool}
 
 @function remove-nth($list, $index) {
   @return replace-nth($list, $index, "");
 }
 
+// @requires remove-nth
 // @alias remove-nth
 
 @function without-nth($list, $index) {

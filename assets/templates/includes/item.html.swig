@@ -45,7 +45,7 @@
       <p class="sassdoc__item-description">{{ item.description | replace('\n', '<br />') | markdown }}</p>
     {% endif %}
 
-    {% if item.access != "public" %}
+    {% if item.access and item.access | lower != "public" %}
       <h3>Access</h3>
       <p class="sassdoc__item-access">{{ item.access }}</p>
     {% endif %}
@@ -71,7 +71,8 @@
           <tr class="sassdoc__item-parameter">
             <td><code>${{ parameter.name }}</code></td>
             <td>{% if parameter.description %}{{ parameter.description }}{% else %}&mdash;{% endif %}</td>
-            <td>{% if parameter.type == "*" %}Any{% else %}<code>{{ parameter.type }}</code>{% endif %}</td>
+            {% set parameter_type = parameter.type | join('</code>, <code>') %}
+            <td>{% if parameter_type == "*" %}Any{% else %}<code>{{ parameter_type }}</code>{% endif %}</td>
             <td>{% if parameter.default %}{{ parameter.default }}{% else %}&mdash;{% endif %}</td>
           </tr>
         {% endfor %}
@@ -81,9 +82,9 @@
       <p>None.</p>
     {% endif %}
 
-    {% if item.returns.type %}
+    {% if item.returns %}
       <h3>Returns</h3>
-      <p class="sassdoc__item-description">{% if item.returns.description %}{{ item.returns.description }}: {% endif %}<code>{{ item.returns.type | join('|') }}</code></p>
+      <p class="sassdoc__item-description">{% if item.returns.description %}{{ item.returns.description }}: {% endif %}<code>{{ item.returns.type | join('</code>, <code>') | raw }}</code></p>
     {% endif %}
 
     {% if item.throws.length > 0 %}
@@ -109,9 +110,9 @@
       {% endfor %}
     {% endif %}
 
-    {% if item.todos.length > 0 %}
+    {% if item.todo.length > 0 %}
       <h3>TODO's</h3>
-      {% for _todo in item.todos %}
+      {% for _todo in item.todo %}
         {% if loop.first %}<ul class="sassdoc__item-todos">{% endif %}
         <li>{{ _todo }}</li>
         {% if loop.last %}</ul>{% endif %}

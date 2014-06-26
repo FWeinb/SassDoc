@@ -1,228 +1,546 @@
 'use strict';
 
-var regex = require('./regex');
 var utils = require('./utils');
+
+// Tokens
+var LINE_BREAK = "\n";
+var SPACE = " ";
+var TAB = "\t";
+var LBRACE = "{";
+var RBRACE = "}";
+var LPAREN = "(";
+var RPAREN = ")";
+var LBRACK = "[";
+var RBRACK = "]";
 
 exports = module.exports = {
 
   /**
-   * Define a block of comments
-   * @param  {Number} index - index of line where function/mixin starts
-   * @param  {Array}  array - file as an array of lines
-   * @return {Array}          array of lines
+   * Parse a file
+   * @param  {String} string - File content
+   * @return {Array}           Documented items
    */
-  findCommentBlock: function (index, array) {
-    var previousLine = index - 1,
-        comments = [];
+  parseFile: function (string) {
+    this.string = string;
+    this.pointer = 0;
 
+    var __pointer;                     // Temporary pointer
+    var item;                          // Current item
+    var character;                     // Current character
+    var items = [];                    // Array of documented items
+    var buffer = "";                   // Current buffer
+    var isPreviousLineComment = false; // Is previous line a comment?
 
-    // Loop back
-    while (previousLine >= 0) {
-      // If it's an empty line, break (unless it hasn't started yet)
-      if (regex.isEmpty(array[previousLine]) !== null) {
-        if (comments.length > 0) break;
+    // Start parsing
+    while (this.pointer < this.string.length) {
+      character = this.current();
+      this.next();
+      this.trim();
+      //console.log(character, this.current());
+
+      // Opening comment
+      if (character === "/") {
+        // Get multi-lines comment
+        if (this.current() === "*") {
+          buffer += this.getMultiLineComment();
+          isPreviousLineComment = true;
+        }
+
+        // Get single-line comments
+        else if (this.current() === "/") {
+          buffer += this.getSingleLineComment();
+          isPreviousLineComment = true;
+        }
+
+        else {
+          console.log(string);
+          throw "Unexpected series of characters: `" + character + this.current() + "`.";
+        }
+      }
+
+      // Skip line breaks
+      else if (character === LINE_BREAK) {
+        continue;
+      }
+
+      else {
+        // Comments parsed
+        if (isPreviousLineComment === true) {
+          // Get next line (function/mixin/variable declaration)
+          buffer += character + this.consume(LINE_BREAK) + LINE_BREAK;
+
+          // Store current pointer
+          __pointer = this.pointer;
+
+          // Push
+          item = this.parseBuffer(buffer); 
+          items.push(item);
+
+          // Reset
+          this.string = string;
+          this.pointer = __pointer;
+          isPreviousLineComment = false;
+          buffer = "";
+        }
+
+        else {
+          this.consume(LINE_BREAK);
+        }
+      }
+    }
+
+    return items;
+  },
+
+  /**
+   * Define a multi-lines comment
+   * @return {String}
+   */
+  getMultiLineComment: function () {
+    var buffer = "";
+
+    while (this.current() != "/") {
+      buffer += this.consume("*");
+    }
+
+    return buffer + this.consume(LINE_BREAK);
+  },
+
+  /**
+   * Define a series of single-line comments
+   * @return {String}
+   */
+  getSingleLineComment: function () {
+    var buffer = "";
+    this.previous(); // Roll back for first line
+
+    while (this.current() === "/") {
+      this.consume("/"); // First slash
+      this.consume("/"); // Second slash
+      this.trim();       // Leading spaces
+
+      if (this.current() !== "/") {
+        buffer += this.consume(LINE_BREAK) + LINE_BREAK;
+      }
+    }
+
+    return buffer;
+  },
+
+  /**
+   * Parse a comment to define a documented item
+   * @param  {String} comment to parse 
+   * @return {Object}
+   */
+  parseBuffer: function (string) {
+    this.pointer = 0;
+    this.string = string;
+    this.item = {};
+    var character;
+
+    // Start parsing
+    while (this.pointer < this.string.length) {
+      character = this.current();
+      this.next();
+
+      // Skip empty characters and leading slashes or stars
+      if ([LINE_BREAK, SPACE, TAB, "/", "*"].indexOf(character) !== -1) {
+        // Skip.
       } 
 
-      // If it's not a comment, break
-      else if (!regex.isComment(array[previousLine])) {
-        break;
+      // Capture annotation (or @mixin/@function)
+      else if (character === "@") {
+        this.captureAnnotation(this.consume([SPACE, TAB, LINE_BREAK]));
       }
 
+      // Capture variable
+      else if (character === "$") {
+        this.captureVariable();
+      }
+
+      // Fill description
       else {
-        // Push the new comment line
-        comments.unshift(array[previousLine]);
-      }
-      
-      previousLine--;
-    }
-
-
-    return comments;
-  },
-
-  /**
-   * Parse a block of comments
-   * @param  {Array} comments - array of lines
-   * @return {Object}           function/mixin documentation
-   */
-  parseCommentBlock: function (comments) {
-    var line, doc = {
-      'parameters': [],
-      'throws': [],
-      'todos': [],
-      'alias': false,
-      'aliased': [],
-      'links': [],
-      'requires': [],
-      'description': '',
-      'since': false,
-      'access': 'public',
-      'deprecated': false,
-      'author': false,
-      'returns': {
-        'type': null,
-        'description': false
-      }
-    };
-
-    comments.forEach(function (line, index) {
-      line = exports.parseLine(utils.uncomment(line));
-
-      // Separator or @ignore
-      if (!line) {
-        return false;
-      }
-
-      // Array things (@throws, @parameters...)
-      if (line.array === true) {
-        doc[line.type].push(line.value);
-      }
-
-      else if (line.type === 'description') {
-        doc[line.type] += line.value;
-      }
-
-      // Anything else
-      else {
-        doc[line.type] = line.value;
-      }
-
-    });
-
-    // Remove first carriage return
-    doc.description = doc.description.substring(1);
-
-    return doc;
-  },
-
-  /**
-   * Parse a block of comments
-   * @param  {Array} comments - array of lines
-   * @return {Object}           function/mixin documentation
-   */
-  parseVariableBlock: function (comments) {
-    var line, doc = {
-      'description': '',
-      'datatype': ''
-    };
-
-    comments.forEach(function (line, index) {
-      line = regex.isVar(utils.uncomment(line));
-
-      doc.datatype = line[1];
-      doc.description = line[2];
-    });
-
-    return doc;
-  },
-
-  /**
-   * Parse a file
-   * @param  {String} content - file content
-   * @return {Array}            array of documented functions/mixins
-   */
-  parseFile: function (content) {
-    var array = content.split("\n"),
-        tree = [];
-
-    // Looping through the file
-    array.forEach(function (line, index) {
-      var isCallable = regex.isFunctionOrMixin(line);
-
-      // If it's either a mixin or a function
-      if (isCallable) {
-        var item = exports.parseCommentBlock(exports.findCommentBlock(index, array));
-        item.type = isCallable[1];
-        item.name = isCallable[2];
-
-        tree.push(item);
-      }
-      
-      
-      var isVariable = regex.isVariable(line);
-
-      if (isVariable) {
-        var item = exports.parseVariableBlock(exports.findCommentBlock(index, array));
-        item.type = "variable";
-        item.name = isVariable[1];
-        item.value = isVariable[2];
-        item.access = isVariable[3] == "!global" ? "public" : "private";
-
-        tree.push(item);
-      }
-      
-    });
-
-    return tree;
-  },
-
-  /**
-   * Parse a line to determine what it is
-   * @param  {String} line  - line to be parsed
-   * @return {Object|false}
-   */
-  parseLine: function (line) {
-    var type, value, i,
-        res = { array: false },
-        tokens = ['returns', 'parameters', 'deprecated', 'author', 'access', 'throws', 'todo', 'alias', 'link', 'requires', 'since'];
-
-    // Useless line, skip
-    if (line.length === 0 
-      || regex.isSeparator(line) 
-      || regex.isIgnore(line)) {
-      return false;
-    }
-
-    for (var i = 0; i < tokens.length; i++) {
-      value = regex['is' + tokens[i].capitalize()](line);
-
-      if (value !== null) {
-        type = tokens[i];
-        break;
+        if (typeof this.item.description === "undefined") {
+          this.item.description = character + this.consume(LINE_BREAK);
+        }
+        else {
+          this.item.description += LINE_BREAK + character + this.consume(LINE_BREAK);
+        }
       }
     }
 
-    res.type = type;
+    // @todo Make sure we don't capture regular comments
+    return this.item;
+  },
+  
+  /**
+   * Returns current character
+   * @return {String} - Current character
+   */
+  current: function () {
+    return this.string.charAt(this.pointer);
+  },
 
-    switch (type) {
-      case 'returns':
-        res.value = { 'type': value[1].split('|'), 'description': value[2] };
+  /**
+   * Move pointer to the right
+   * @return {Object}
+   */
+  next: function () {
+    this.pointer++;
+    return this;
+  },
+    
+  /**
+   * Move pointer to the left
+   * @return {Object}
+   */
+  previous: function () {
+    this.pointer--;
+    return this;
+  },
+
+  /**
+   * Consume token or throw error
+   * @param  {Array|String} tokens - Token to be consumed
+   * @throws Unexpected end of stream.
+   * @return {String}
+   */
+  consume: function (tokens) {
+    var character, string = "";
+
+    while (this.pointer <= this.string.length) {
+      character = this.current();
+      this.next();
+
+      if (tokens.indexOf(character) !== -1) {
+        return string;
+      }
+
+      string += character;
+    }
+
+    throw "Unexpected end of stream.";
+  },
+
+  /**
+   * Consume any leading space
+   * @return {Object}
+   */
+  trim: function () {
+    while (this.current().match(/\s|\t/)) {
+      this.next();
+    }
+    return this;
+  },
+
+  /**
+   * Capture annotation and defer treatment to a specific function
+   * @param  {String} annotation
+   */
+  captureAnnotation: function (annotation) {
+    this.trim();
+
+    switch (annotation) {
+      // Capture a simple flag
+      // i.e. everything after the flag until end of line
+      case "access":
+      case "since":
+      case "alias":
+      case "author":
+        this.captureSimple(annotation);
         break;
 
-      case 'parameters':
-        res.value = { 'type': value[1], 'name': value[2], 'default': value[3], 'description': value[4] };
-        res.array = true;
+      // Capture the @deprecated flag
+      // Almost like a simple capture
+      // Except value is optional
+      case "deprecated":
+        this.captureDeprecated();
         break;
 
-      case 'deprecated':
-        res.value = value[1] || true;
+      // Capture an array flag
+      // Like a simple flag
+      // But there can be multiple instances of them
+      case "requires":
+      case "require":
+      case "throws":
+      case "exception":
+      case "todo":
+        this.captureArray(annotation);
         break;
 
-      case 'author':
-      case 'access':
-      case 'alias':
-      case 'since':
-        res.value = value[1];
+      // @ignore lines shouldn't be documented
+      // Hence, just move the pointer to the next line
+      case "ignore":
+        this.consume(LINE_BREAK);
         break;
 
-      case 'throws':
-      case 'todos':
-      case 'requires':
-        res.value = value[1];
-        res.array = true;
+      // Capture a @param (or @arg or @argument)
+      case "param":
+      case "arg":
+      case "argument":
+        this.captureParam();
         break;
 
-      case 'link':
-        res.value = { 'url': value[1], 'caption': value[2] }
+      // Capture a @link
+      case "link":
+        this.captureLink();
         break;
 
-      case 'description':
+      // Capture a @return (or @returns)
+      case "return":
+      case "returns":
+        this.captureReturn();
+        break;
+
+      // Capture a @var documentation
+      case "var":
+        this.captureVariableDoc();
+        break;
+
+      // Capture a @mixin/@function signature
+      // in order to retrieve the name
+      case "function":
+      case "mixin":
+        this.item.type = annotation;
+        this.captureSignature();
+        break;
+
       default:
-        res.value = '\n' + line;
-        res.type = 'description';
+        throw "Unknown annotation `" + annotation + "`.";
+    }
+  },
+
+  normalizeKey: function (key) {
+    if (key === "require") {
+      return "requires";
     }
 
-    return res;
+    else if (key === "exception") {
+      return "throws";
+    }
+
+    return key;
+  },
+
+  /**
+   * Capture a simple value
+   * @param  {String} key 
+   */
+  captureSimple: function (key) {
+    this.item[key] = this.consume(LINE_BREAK).trim();
+  },
+
+  /**
+   * Capture an array value
+   * @param  {String} key
+   */
+  captureArray: function (key) {
+    var value = this.consume(LINE_BREAK).trim();
+
+    key = this.normalizeKey(key);
+
+    if (typeof this.item[key] === "undefined") {
+      this.item[key] = [];
+    }
+    
+    this.item[key].push(value);
+  },
+
+  /**
+   * Capture signature
+   */
+  captureSignature: function () {
+    this.item.name = this.consume(LPAREN).trim();
+    this.pointer = this.string.length + 1;
+  },
+
+  /**
+   * Capture deprecated
+   */
+  captureDeprecated: function () {
+    if (this.current() === "@") {
+      this.item.deprecated = "";
+      this.previous();
+    }
+    else {
+      this.item.deprecated = this.consume(LINE_BREAK);
+    }
+  },
+
+  /**
+   * Capture a parameter
+   */
+  captureParam: function () {
+    var defaultValue, description, param = {};
+
+    // Get the type
+    this.trim();
+    param.type = this.captureType();
+
+    // Get the name
+    this.trim();
+    this.consume("$");
+    param.name = this.consume([SPACE, TAB, LINE_BREAK]).trim();
+    this.trim();
+
+    // If there is a default value, get the default value
+    if (this.current() === LPAREN) {
+      this.next();
+      defaultValue = this.consume(RPAREN);
+      this.trim();
+    }
+    
+    // If there is an hyphen, consume it
+    if (this.current() === "-") {
+      this.next();
+      this.trim();
+    }
+
+    // If there is a description, get the description
+    if (this.current() !== "@") {
+      description = this.consume(LINE_BREAK);
+    }
+    else {
+      this.previous();
+    }
+
+    param.defaultValue = (defaultValue || "").trim();
+    param.description = (description || "").trim();
+
+    // Push the whole thing
+    if (typeof this.item.parameters === "undefined") {
+      this.item.parameters = [];
+    }
+
+    this.item.parameters.push(param);
+  },
+
+  /**
+   * Capture a return flag
+   */
+  captureReturn: function () {
+    var description, returns = {};
+
+    // Eat the left brace, and store the type
+    returns.type = this.captureType();
+    this.trim();
+
+    // If there is a description, get the description
+    if (this.current() !== "@") {
+      description = this.consume(LINE_BREAK);
+    }
+    // If we've already jumped line, roll back
+    else {
+      this.previous();
+    }
+
+    returns.description = (description || "").trim()
+    this.item.returns = returns;
+  },
+
+  /**
+   * Capture a link
+   */
+  captureLink: function () {
+    var label, link = {};
+
+    // Get url
+    link.url = this.consume([SPACE, TAB, LINE_BREAK]).trim();
+    this.trim();
+
+    // If there is a label, get the label
+    if (this.current() !== "@") {
+      label = this.consume(LINE_BREAK);
+    }
+    // If we've already jumped line, roll back
+    else {
+      this.previous();
+    }
+
+    link.label = (label || link.url).trim();
+
+    // Push the whole thing
+    if (typeof this.item.links === "undefined") {
+      this.item.links = [];
+    }
+
+    this.item.links.push(link);
+  },
+
+  /**
+   * Capture a variable documentation
+   */
+  captureVariableDoc: function () {
+    var type, description;
+
+    this.item.type = "variable";
+    this.item.datatype = this.captureType();
+    this.trim();
+
+    // If there is an hyphen, consume it
+    if (this.current() === "-") {
+      this.consume("-");
+      this.trim();
+    }
+
+    // If there is a description, get the description
+    if (this.current() !== "$") {
+      this.item.description = this.consume(LINE_BREAK);
+    }
+
+    else {
+      this.item.description = "";
+    }
+  },
+
+  /**
+   * Capture a variable definition
+   */
+  captureVariable: function () {
+    this.item.name = this.consume([SPACE, TAB, ":"]);
+    this.trim();
+
+    if (this.current() === ":") {
+      this.next();
+      this.trim();
+    }
+
+    this.item.value = this.consume(";");
+
+    if (this.item.value.indexOf("!global") !== -1) {
+      this.item.access = "global";
+      this.item.value = this.item.value.replace("!global", "").trim();
+    }
+
+    else {
+      this.item.access = "scoped";
+    }
+  },
+
+  /**
+   * Make sure type is a valid Sass type
+   * @param {String} type
+   */
+  isValidType: function (type) {
+    return ["*", "arglist", "bool", "color", "list", "map", "null", "number", "string"].indexOf(type.toLowerCase()) !== -1;
+  },
+
+  /**
+   * Capture type
+   * @return {String}
+   */
+  captureType: function () {
+    this.consume(LBRACE);
+    this.trim();
+    return this.consume(RBRACE).trim().split(/[\s\t]\|[\s\t]/);
   }
 
+};
+
+/**
+ * Extend String primitive to add a trim function
+ * @return {string} trimed string
+ */
+String.prototype.trim = function () {
+  return this.replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g,"").replace(/\s+/g," ");
 };

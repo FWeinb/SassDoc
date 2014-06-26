@@ -236,6 +236,10 @@ exports = module.exports = {
         continue;
       }
 
+      if (typeof data.index[data.index[item].alias].aliased === "undefined") {
+        data.index[data.index[item].alias].aliased = [];
+      }
+      
       data.index[data.index[item].alias].aliased.push(item);
     }
   }

@@ -1,15 +1,15 @@
 // Shift indexes from `$list` of `$value`
-// ---
+//
 // @author Ana Tudor
-// ---
+//
 // @ignore Documentation: http://sassylists.com/documentation/#loop
-// ---
+//
 // @param {List}   $list      - list to update
 // @param {Number} $value (1) - number of position between old and new indexes
-// ---
+//
 // @throws `$value` is not a number for `loop`.
-// ---
-// @returns {List | Bool}
+//
+// @return {List | Bool}
 
 @function loop($list, $value: 1) {
   @if type-of($value) != "number" {
@@ -31,6 +31,7 @@
   @return $result;
 }
 
+// @requires loop
 // @alias loop
 
 @function shift-indexes($list, $value: 1) {

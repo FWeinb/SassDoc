@@ -1,7 +1,6 @@
 <section class="sassdoc__item" id="variable-{{ item.name }}">
 
   <h2 class="sassdoc__item-name">
-    <span class="sassdoc__item-type">[{{ item.type }}]</span>
     <code>${{ item.name }}</code>
   </h2>
 
@@ -14,7 +13,8 @@
 
   {% if item.datatype %}
     <h3>Type</h3>
-    <p>{% if item.datatype == "*" %}Any{% else %}<code>{{ item.datatype }}</code>{% endif %}</p>
+    {% set datatype = item.datatype | join('</code><code>') | raw %}
+    <p>{% if datatype == "*" %}Any{% else %}<code>{{ datatype }}</code>{% endif %}</p>
   {% endif %}
 
   {% if item.value %}

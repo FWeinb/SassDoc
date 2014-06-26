@@ -1,10 +1,10 @@
 // Reverse the order of `$list`
-// ---
+//
 // @ignore Documentation: http://sassylists.com/documentation/#reverse
-// ---
+//
 // @param {List} $list - list to revers
-// ---
-// @returns {List}
+//
+// @return {List}
 
 @function reverse($list) {
   $length: length($list);
@@ -23,6 +23,7 @@
   @return $list;
 }
 
+// @requires reverse
 // @alias reverse
 
 @function mirror($list) {
