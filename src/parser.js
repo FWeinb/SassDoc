@@ -36,7 +36,6 @@ exports = module.exports = {
       character = this.current();
       this.next();
       this.trim();
-      //console.log(character, this.current());
 
       // Opening comment
       if (character === "/") {
@@ -53,7 +52,6 @@ exports = module.exports = {
         }
 
         else {
-          console.log(string);
           throw "Unexpected series of characters: `" + character + this.current() + "`.";
         }
       }
