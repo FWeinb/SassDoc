@@ -236,6 +236,7 @@ exports = module.exports = {
   postTreatData: function (data) {
     exports.compileAliases(data);
     exports.compileRequires(data);
+    exports.raiseWarnings(data);
   },
 
   /**
@@ -243,17 +244,30 @@ exports = module.exports = {
    * @param  {Object} data
    */
   compileAliases: function (data) {
-    for (var item in data.index) {
-      if (!data.index[item].alias) {
+    var item, name;
+
+    for (name in data.index) {
+      item = data.index[name];
+
+      // If item has no @alias, skip
+      if (!utils.isset(item.alias)) {
         continue;
       }
 
-      if (typeof data.index[data.index[item].alias].aliased === "undefined") {
-        data.index[data.index[item].alias].aliased = [];
+      // If @alias maps to a valid item, update aforesaid item
+      if (utils.isset(data.index[item.alias])) {
+
+        // If `aliased` key doesn't exist yet, create it
+        if (!utils.isset(data.index[item.alias].aliased)) {
+          data.index[item.alias].aliased = [];
+        }
+
+        data.index[item.alias].aliased.push(item.name);
       }
 
-      if (typeof data.index[data.index[item].alias] !== "undefined") {
-        data.index[data.index[item].alias].aliased.push(item);
+      // Incorrect @alias
+      else {
+        logger.log("Item `" + name + " is an alias of `" + item.alias + "` but this item doesn't exist."); 
       }
     }
   },
@@ -263,16 +277,84 @@ exports = module.exports = {
    * @param  {Object} data
    */
   compileRequires: function (data) {
-    for (var item in data.index) {
-      if (!data.index[item].requires) {
+    var item, name;
+
+    for (name in data.index) {
+      item = data.index[name];
+
+      // If item has no @requires, skip
+      if (!utils.isset(item.requires)) {
         continue;
       }
 
-      for (var i = 0; i < data.index[item].requires.length; i++) {
-        if (typeof data.index[item].requires[i].type === "undefined" && typeof data.index[data.index[item].requires[i].item] !== "undefined") {
-          data.index[item].requires[i].type = data.index[data.index[item].requires[i].item].type;
+      // For each @requires
+      for (var i = 0; i < item.requires.length; i++) {
+        // If @requires type is defined, skip
+        if (utils.isset(item.requires[i].type)) {
+          continue;
+        } 
+
+        // If @requires maps to a valid item, update aforesaid item
+        if (utils.isset(data.index[item.requires[i].item])) {
+          data.index[name].requires[i].type = data.index[item.requires[i].item].type;
+        }
+
+        // Incorrect @requires
+        else {
+          logger.log("Item `" + name + " requires `" + item.requires[i].item + "` but this item doesn't exist.");
         }
       }
+    }
+  },
+
+  /**
+   * Raise warning for incoherent or invalid things
+   * @param {Object} data
+   */
+  raiseWarnings: function (data) {
+    var name, item, i, j;
+    var validTypes = ["*", "arglist", "bool", "color", "list", "map", "null", "number", "string"];
+    
+    if (logger.enabled === false) {
+      return;
+    }
+
+    for (name in data.index) {
+      item = data.index[name];
+
+      // Incorrect data type in @param
+      if (utils.isset(item.parameters)) {
+        // For each parameter
+        for (i = 0; i < item.parameters.length; i++) {
+          // For each possible type for current parameter
+          for (j = 0; j < item.parameters[i].type; j++) {
+            if (validTypes.indexOf(item.parameters[i].type[j].toLowerCase()) === -1) {
+              logger.log("Parameter `" + item.parameters[i].name + "` from item `" + item.name + "` is from type `" + item.parameters[i].type[j] + "` which is not a valid Sass type.");
+            }
+          }
+        }
+      }
+
+      // Incorrect data type in @return
+      if (utils.isset(item.returns)) {
+        // For each possible type in @return
+        for (i = 0; i < item.returns.type.length; i++) {
+          if (validTypes.indexOf(item.returns.type[i].trim().toLowerCase()) === -1) {
+            logger.log("Item `" + item.name + "` can return a `" + item.returns.type[i] + "` which is not a valid Sass type.");
+          }
+        }
+      }
+
+      // Incorrect URL in @link
+      if (utils.isset(item.links)) {
+        // For each @link
+        for (i = 0; i < item.links.length; i++) {
+          if (!item.links[i].url.match(/https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/)) {
+            logger.log("Item `" + item.name + "` has a link leading to an invalid URL (`" + item.links[i].url + "`).");
+          }
+        }
+      }
+
     }
   }
 
