@@ -258,12 +258,15 @@ exports = module.exports = {
       // Capture an array flag
       // Like a simple flag
       // But there can be multiple instances of them
-      case "requires":
-      case "require":
       case "throws":
       case "exception":
       case "todo":
         this.captureArray(annotation);
+        break;
+
+      case "requires":
+      case "require":
+        this.captureRequires();
         break;
 
       // @ignore lines shouldn't be documented
@@ -308,18 +311,6 @@ exports = module.exports = {
     }
   },
 
-  normalizeKey: function (key) {
-    if (key === "require") {
-      return "requires";
-    }
-
-    else if (key === "exception") {
-      return "throws";
-    }
-
-    return key;
-  },
-
   /**
    * Capture a simple value
    * @param  {String} key 
@@ -333,9 +324,11 @@ exports = module.exports = {
    * @param  {String} key
    */
   captureArray: function (key) {
-    var value = this.consume(LINE_BREAK).trim();
+    if (key === "exception") {
+      key = "throws";
+    }
 
-    key = this.normalizeKey(key);
+    var value = this.consume(LINE_BREAK).trim();
 
     if (typeof this.item[key] === "undefined") {
       this.item[key] = [];
@@ -530,7 +523,30 @@ exports = module.exports = {
   captureType: function () {
     this.consume(LBRACE);
     this.trim();
+
     return this.consume(RBRACE).trim().split(/[\s\t]\|[\s\t]/);
+  },
+
+  /**
+   * Capture requires
+   */
+  captureRequires: function () {
+    var requires = {};
+
+    if (this.current() === LBRACE) {
+      this.consume(LBRACE);
+      this.trim();
+      requires.type = this.consume(RBRACE).trim();
+      this.trim();
+    }
+
+    requires.item = this.consume(LINE_BREAK);
+
+    if (typeof this.item.requires === "undefined") {
+      this.item.requires = [];
+    }
+
+    this.item.requires.push(requires);
   }
 
 };
