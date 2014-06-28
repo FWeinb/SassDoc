@@ -29,5 +29,8 @@
   },
   "bin": {
     "sassdoc": "./bin/sassdoc"
+  },
+  "devDependencies": {
+    "jshint": "^2.5.1"
   }
 }

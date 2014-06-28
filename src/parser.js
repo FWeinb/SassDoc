@@ -1,17 +1,13 @@
 'use strict';
 
-var utils = require('./utils');
-
 // Tokens
-var LINE_BREAK = "\n";
-var SPACE = " ";
-var TAB = "\t";
-var LBRACE = "{";
-var RBRACE = "}";
-var LPAREN = "(";
-var RPAREN = ")";
-var LBRACK = "[";
-var RBRACK = "]";
+var LINE_BREAK = '\n';
+var SPACE = ' ';
+var TAB = '\t';
+var LBRACE = '{';
+var RBRACE = '}';
+var LPAREN = '(';
+var RPAREN = ')';
 
 exports = module.exports = {
 
@@ -28,7 +24,7 @@ exports = module.exports = {
     var item;                          // Current item
     var character;                     // Current character
     var items = [];                    // Array of documented items
-    var buffer = "";                   // Current buffer
+    var buffer = '';                   // Current buffer
     var isPreviousLineComment = false; // Is previous line a comment?
 
     // Start parsing
@@ -38,21 +34,21 @@ exports = module.exports = {
       this.trim();
 
       // Opening comment
-      if (character === "/") {
+      if (character === '/') {
         // Get multi-lines comment
-        if (this.current() === "*") {
+        if (this.current() === '*') {
           buffer += this.getMultiLineComment();
           isPreviousLineComment = true;
         }
 
         // Get single-line comments
-        else if (this.current() === "/") {
+        else if (this.current() === '/') {
           buffer += this.getSingleLineComment();
           isPreviousLineComment = true;
         }
 
         else {
-          throw "Unexpected series of characters: `" + character + this.current() + "`.";
+          throw 'Unexpected series of characters: `' + character + this.current() + '`.';
         }
       }
 
@@ -78,7 +74,7 @@ exports = module.exports = {
           this.string = string;
           this.pointer = __pointer;
           isPreviousLineComment = false;
-          buffer = "";
+          buffer = '';
         }
 
         else {
@@ -95,10 +91,10 @@ exports = module.exports = {
    * @return {String}
    */
   getMultiLineComment: function () {
-    var buffer = "";
+    var buffer = '';
 
-    while (this.current() != "/") {
-      buffer += this.consume("*");
+    while (this.current() !== '/') {
+      buffer += this.consume('*');
     }
 
     return buffer + this.consume(LINE_BREAK);
@@ -109,15 +105,15 @@ exports = module.exports = {
    * @return {String}
    */
   getSingleLineComment: function () {
-    var buffer = "";
+    var buffer = '';
     this.previous(); // Roll back for first line
 
-    while (this.current() === "/") {
-      this.consume("/"); // First slash
-      this.consume("/"); // Second slash
+    while (this.current() === '/') {
+      this.consume('/'); // First slash
+      this.consume('/'); // Second slash
       this.trim();       // Leading spaces
 
-      if (this.current() !== "/") {
+      if (this.current() !== '/') {
         buffer += this.consume(LINE_BREAK) + LINE_BREAK;
       }
     }
@@ -142,23 +138,23 @@ exports = module.exports = {
       this.next();
 
       // Skip empty characters and leading slashes or stars
-      if ([LINE_BREAK, SPACE, TAB, "/", "*"].indexOf(character) !== -1) {
+      if ([LINE_BREAK, SPACE, TAB, '/', '*'].indexOf(character) !== -1) {
         // Skip.
       } 
 
       // Capture annotation (or @mixin/@function)
-      else if (character === "@") {
+      else if (character === '@') {
         this.captureAnnotation(this.consume([SPACE, TAB, LINE_BREAK]));
       }
 
       // Capture variable
-      else if (character === "$") {
+      else if (character === '$') {
         this.captureVariable();
       }
 
       // Fill description
       else {
-        if (typeof this.item.description === "undefined") {
+        if (typeof this.item.description === 'undefined') {
           this.item.description = character + this.consume(LINE_BREAK);
         }
         else {
@@ -204,7 +200,7 @@ exports = module.exports = {
    * @return {String}
    */
   consume: function (tokens) {
-    var character, string = "";
+    var character, string = '';
 
     while (this.pointer <= this.string.length) {
       character = this.current();
@@ -217,7 +213,7 @@ exports = module.exports = {
       string += character;
     }
 
-    throw "Unexpected end of stream.";
+    throw 'Unexpected end of stream.';
   },
 
   /**
@@ -241,73 +237,73 @@ exports = module.exports = {
     switch (annotation) {
       // Capture a simple flag
       // i.e. everything after the flag until end of line
-      case "access":
-      case "since":
-      case "alias":
-      case "author":
+      case 'access':
+      case 'since':
+      case 'alias':
+      case 'author':
         this.captureSimple(annotation);
         break;
 
       // Capture the @deprecated flag
       // Almost like a simple capture
       // Except value is optional
-      case "deprecated":
+      case 'deprecated':
         this.captureDeprecated();
         break;
 
       // Capture an array flag
       // Like a simple flag
       // But there can be multiple instances of them
-      case "throws":
-      case "exception":
-      case "todo":
+      case 'throws':
+      case 'exception':
+      case 'todo':
         this.captureArray(annotation);
         break;
 
-      case "requires":
-      case "require":
+      case 'requires':
+      case 'require':
         this.captureRequires();
         break;
 
       // @ignore lines shouldn't be documented
       // Hence, just move the pointer to the next line
-      case "ignore":
+      case 'ignore':
         this.consume(LINE_BREAK);
         break;
 
       // Capture a @param (or @arg or @argument)
-      case "param":
-      case "arg":
-      case "argument":
+      case 'param':
+      case 'arg':
+      case 'argument':
         this.captureParam();
         break;
 
       // Capture a @link
-      case "link":
+      case 'link':
         this.captureLink();
         break;
 
       // Capture a @return (or @returns)
-      case "return":
-      case "returns":
+      case 'return':
+      case 'returns':
         this.captureReturn();
         break;
 
       // Capture a @var documentation
-      case "var":
+      case 'var':
         this.captureVariableDoc();
         break;
 
       // Capture a @mixin/@function signature
       // in order to retrieve the name
-      case "function":
-      case "mixin":
+      case 'function':
+      case 'mixin':
         this.item.type = annotation;
         this.captureSignature();
         break;
 
       default:
-        throw "Unknown annotation `" + annotation + "`.";
+        throw 'Unknown annotation `' + annotation + '`.';
     }
   },
 
@@ -324,13 +320,13 @@ exports = module.exports = {
    * @param  {String} key
    */
   captureArray: function (key) {
-    if (key === "exception") {
-      key = "throws";
+    if (key === 'exception') {
+      key = 'throws';
     }
 
     var value = this.consume(LINE_BREAK).trim();
 
-    if (typeof this.item[key] === "undefined") {
+    if (typeof this.item[key] === 'undefined') {
       this.item[key] = [];
     }
     
@@ -349,8 +345,8 @@ exports = module.exports = {
    * Capture deprecated
    */
   captureDeprecated: function () {
-    if (this.current() === "@") {
-      this.item.deprecated = "";
+    if (this.current() === '@') {
+      this.item.deprecated = '';
       this.previous();
     }
     else {
@@ -370,7 +366,7 @@ exports = module.exports = {
 
     // Get the name
     this.trim();
-    this.consume("$");
+    this.consume('$');
     param.name = this.consume([SPACE, TAB, LINE_BREAK]).trim();
     this.trim();
 
@@ -382,24 +378,24 @@ exports = module.exports = {
     }
     
     // If there is an hyphen, consume it
-    if (this.current() === "-") {
+    if (this.current() === '-') {
       this.next();
       this.trim();
     }
 
     // If there is a description, get the description
-    if (this.current() !== "@") {
+    if (this.current() !== '@') {
       description = this.consume(LINE_BREAK);
     }
     else {
       this.previous();
     }
 
-    param.defaultValue = (defaultValue || "").trim();
-    param.description = (description || "").trim();
+    param.defaultValue = (defaultValue || '').trim();
+    param.description = (description || '').trim();
 
     // Push the whole thing
-    if (typeof this.item.parameters === "undefined") {
+    if (typeof this.item.parameters === 'undefined') {
       this.item.parameters = [];
     }
 
@@ -417,7 +413,7 @@ exports = module.exports = {
     this.trim();
 
     // If there is a description, get the description
-    if (this.current() !== "@") {
+    if (this.current() !== '@') {
       description = this.consume(LINE_BREAK);
     }
     // If we've already jumped line, roll back
@@ -425,7 +421,7 @@ exports = module.exports = {
       this.previous();
     }
 
-    returns.description = (description || "").trim()
+    returns.description = (description || '').trim();
     this.item.returns = returns;
   },
 
@@ -440,7 +436,7 @@ exports = module.exports = {
     this.trim();
 
     // If there is a label, get the label
-    if (this.current() !== "@") {
+    if (this.current() !== '@') {
       label = this.consume(LINE_BREAK);
     }
     // If we've already jumped line, roll back
@@ -451,7 +447,7 @@ exports = module.exports = {
     link.label = (label || link.url).trim();
 
     // Push the whole thing
-    if (typeof this.item.links === "undefined") {
+    if (typeof this.item.links === 'undefined') {
       this.item.links = [];
     }
 
@@ -462,25 +458,23 @@ exports = module.exports = {
    * Capture a variable documentation
    */
   captureVariableDoc: function () {
-    var type, description;
-
-    this.item.type = "variable";
+    this.item.type = 'variable';
     this.item.datatype = this.captureType();
     this.trim();
 
     // If there is an hyphen, consume it
-    if (this.current() === "-") {
-      this.consume("-");
+    if (this.current() === '-') {
+      this.consume('-');
       this.trim();
     }
 
     // If there is a description, get the description
-    if (this.current() !== "$") {
+    if (this.current() !== '$') {
       this.item.description = this.consume(LINE_BREAK);
     }
 
     else {
-      this.item.description = "";
+      this.item.description = '';
     }
   },
 
@@ -488,23 +482,23 @@ exports = module.exports = {
    * Capture a variable definition
    */
   captureVariable: function () {
-    this.item.name = this.consume([SPACE, TAB, ":"]);
+    this.item.name = this.consume([SPACE, TAB, ':']);
     this.trim();
 
-    if (this.current() === ":") {
+    if (this.current() === ':') {
       this.next();
       this.trim();
     }
 
-    this.item.value = this.consume(";");
+    this.item.value = this.consume(';');
 
-    if (this.item.value.indexOf("!global") !== -1) {
-      this.item.access = "global";
-      this.item.value = this.item.value.replace("!global", "").trim();
+    if (this.item.value.indexOf('!global') !== -1) {
+      this.item.access = 'global';
+      this.item.value = this.item.value.replace('!global', '').trim();
     }
 
     else {
-      this.item.access = "scoped";
+      this.item.access = 'scoped';
     }
   },
 
@@ -513,7 +507,7 @@ exports = module.exports = {
    * @param {String} type
    */
   isValidType: function (type) {
-    return ["*", "arglist", "bool", "color", "list", "map", "null", "number", "string"].indexOf(type.toLowerCase()) !== -1;
+    return ['*', 'arglist', 'bool', 'color', 'list', 'map', 'null', 'number', 'string'].indexOf(type.toLowerCase()) !== -1;
   },
 
   /**
@@ -539,7 +533,7 @@ exports = module.exports = {
       requires.type = this.consume(RBRACE).trim();
       
       if (['function', 'mixin', 'var'].indexOf(requires.type) === -1) {
-        throw requires.type + " is not a valid type of @requires. Please set either `function`, `mixin` or `var`.";
+        throw requires.type + ' is not a valid type of @requires. Please set either `function`, `mixin` or `var`.';
       }
 
       this.trim();
@@ -547,7 +541,7 @@ exports = module.exports = {
 
     requires.item = this.consume(LINE_BREAK);
 
-    if (typeof this.item.requires === "undefined") {
+    if (typeof this.item.requires === 'undefined') {
       this.item.requires = [];
     }
 
@@ -561,5 +555,5 @@ exports = module.exports = {
  * @return {string} trimed string
  */
 String.prototype.trim = function () {
-  return this.replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g,"").replace(/\s+/g," ");
+  return this.replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g, '').replace(/\s+/g, ' ');
 };

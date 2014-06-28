@@ -53,7 +53,7 @@ exports = module.exports = {
    * @return {Bool}
    */
   isset: function (value) {
-    return typeof value !== "undefined";
+    return typeof value !== 'undefined';
   }
 
 };
@@ -72,7 +72,7 @@ String.prototype.repeat = function (times) {
  * @return {string} trimed string
  */
 String.prototype.trim = function () {
-  return this.replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g,'').replace(/\s+/g,' ');
+  return this.replace(/(?:(?:^|\n)\s+|\s+(?:$|\n))/g, '').replace(/\s+/g, ' ');
 };
 
 /**
@@ -80,4 +80,4 @@ String.prototype.trim = function () {
  */
 String.prototype.capitalize = function () {
   return this.charAt(0).toUpperCase() + this.slice(1);
-}
+};
