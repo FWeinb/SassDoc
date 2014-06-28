@@ -537,6 +537,11 @@ exports = module.exports = {
       this.consume(LBRACE);
       this.trim();
       requires.type = this.consume(RBRACE).trim();
+      
+      if (['function', 'mixin', 'var'].indexOf(requires.type) === -1) {
+        throw requires.type + " is not a valid type of @requires. Please set either `function`, `mixin` or `var`.";
+      }
+
       this.trim();
     }
 
