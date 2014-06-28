@@ -12,6 +12,7 @@
   @return slice($list, 2);
 }
 
+// @requires tail
 // @alias tail
 
 @function rest($list) {

@@ -29,6 +29,7 @@
   @return $result;
 }
 
+// @requires shift-indexes
 // @alias shift-indexes
 
 @function shift-indexes($list, $value: 1) {

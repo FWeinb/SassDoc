@@ -14,6 +14,7 @@
   @return if(length($result) == 1, nth($result, 1), $result);
 }
 
+// @requires union
 // @alias union
 
 @function merge($lists...) {

@@ -29,6 +29,7 @@
   @return $result;
 }
 
+// @requires flatten
 // @alias flatten
 
 @function unfold($list) {

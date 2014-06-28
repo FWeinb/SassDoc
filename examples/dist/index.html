@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <title>SassDoc :: Documentation</title>
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <link rel="stylesheet" href="assets/css/prism.css" />
   <link rel='stylesheet' href='http://fonts.googleapis.com/css?family=Ubuntu'>
   <meta name="viewport" content="width=device-width">
 </head>
@@ -13,7 +14,7 @@
     <header class="sassdoc__header">
       <div class="container">
         <h1 class="sassdoc__title">SassDoc</h1>
-        <p class="sassdoc__count">35 items documented</p>
+        <p class="sassdoc__count">52 items documented</p>
       </div>
     </header>
 
@@ -29,6 +30,8 @@
   
       <li><a href="#function-chunk">chunk</a></li>
   
+      <li><a href="#function-clean">clean</a></li>
+  
       <li><a href="#function-contain">contain</a></li>
   
       <li><a href="#function-count-values">count-values</a></li>
@@ -41,9 +44,15 @@
   
       <li><a href="#function-flatten">flatten</a></li>
   
+      <li><a href="#function-head">head</a></li>
+  
+      <li><a href="#function-include">include</a></li>
+  
       <li><a href="#function-insert-nth">insert-nth</a></li>
   
       <li><a href="#function-intersection">intersection</a></li>
+  
+      <li><a href="#function-is-mirror">is-mirror</a></li>
   
       <li><a href="#function-is-symmetrical">is-symmetrical</a></li>
   
@@ -55,11 +64,21 @@
   
       <li><a href="#function-loop">loop</a></li>
   
+      <li><a href="#function-luck">luck</a></li>
+  
+      <li><a href="#function-merge">merge</a></li>
+  
+      <li><a href="#function-mirror">mirror</a></li>
+  
+      <li><a href="#function-order">order</a></li>
+  
       <li><a href="#function-prepend">prepend</a></li>
   
       <li><a href="#function-purge">purge</a></li>
   
       <li><a href="#function-random-value">random-value</a></li>
+  
+      <li><a href="#function-randomize">randomize</a></li>
   
       <li><a href="#function-remove">remove</a></li>
   
@@ -71,7 +90,13 @@
   
       <li><a href="#function-replace-nth">replace-nth</a></li>
   
+      <li><a href="#function-rest">rest</a></li>
+  
       <li><a href="#function-reverse">reverse</a></li>
+  
+      <li><a href="#function-roll">roll</a></li>
+  
+      <li><a href="#function-shift-indexes">shift-indexes</a></li>
   
       <li><a href="#function-shuffle">shuffle</a></li>
   
@@ -81,15 +106,25 @@
   
       <li><a href="#function-str-compare">str-compare</a></li>
   
+      <li><a href="#function-stringify">stringify</a></li>
+  
       <li><a href="#function-sum">sum</a></li>
   
       <li><a href="#function-tail">tail</a></li>
   
       <li><a href="#function-to-string">to-string</a></li>
   
+      <li><a href="#function-unfold">unfold</a></li>
+  
       <li><a href="#function-union">union</a></li>
   
+      <li><a href="#function-unique">unique</a></li>
+  
       <li><a href="#function-walk">walk</a></li>
+  
+      <li><a href="#function-without">without</a></li>
+  
+      <li><a href="#function-without-nth">without-nth</a></li>
   
 
   <li class="sassdoc__map-section"><a href="#mixins">Mixins</a></li>
@@ -202,7 +237,7 @@
       <h3>Throws</h3>
       
         <ul class="sassdoc__item-throws">
-        <li><p>$size is not a number for <code>chunk</code>.</p></li>
+        <li><p><code>n</code> is not a number for <code>chunk</code>.</p></li>
         </ul>
       
     
@@ -222,11 +257,34 @@
 </section>
     
       
+      <section class="sassdoc__item  sassdoc__item--alias" id="function-clean">
+  <h2 class="sassdoc__item-name">
+    
+    <code>clean</code>
+
+    
+
+    
+      <span class="sassdoc__item-alias">(alias for <a href="#function-purge"><code>purge</code></a>)</span>
+    
+  </h2>
+
+  
+
+</section>
+    
+      
       <section class="sassdoc__item" id="function-contain">
   <h2 class="sassdoc__item-name">
     
     <code>contain</code>
 
+    
+      <span class="sassdoc__item-alias">(aliased as 
+      
+        <a href="#function-include"><code>include</code></a>
+      
+      )</span>
     
 
     
@@ -639,6 +697,12 @@
     <code>first</code>
 
     
+      <span class="sassdoc__item-alias">(aliased as 
+      
+        <a href="#function-head"><code>head</code></a>
+      
+      )</span>
+    
 
     
   </h2>
@@ -728,6 +792,12 @@
     <code>flatten</code>
 
     
+      <span class="sassdoc__item-alias">(aliased as 
+      
+        <a href="#function-unfold"><code>unfold</code></a>
+      
+      )</span>
+    
 
     
   </h2>
@@ -805,6 +875,40 @@
     
 
     
+
+  
+
+</section>
+    
+      
+      <section class="sassdoc__item  sassdoc__item--alias" id="function-head">
+  <h2 class="sassdoc__item-name">
+    
+    <code>head</code>
+
+    
+
+    
+      <span class="sassdoc__item-alias">(alias for <a href="#function-first"><code>first</code></a>)</span>
+    
+  </h2>
+
+  
+
+</section>
+    
+      
+      <section class="sassdoc__item  sassdoc__item--alias" id="function-include">
+  <h2 class="sassdoc__item-name">
+    
+    <code>include</code>
+
+    
+
+    
+      <span class="sassdoc__item-alias">(alias for <a href="#function-contain"><code>contain</code></a>)</span>
+    
+  </h2>
 
   
 
@@ -1054,11 +1158,34 @@
 </section>
     
       
+      <section class="sassdoc__item  sassdoc__item--alias" id="function-is-mirror">
+  <h2 class="sassdoc__item-name">
+    
+    <code>is-mirror</code>
+
+    
+
+    
+      <span class="sassdoc__item-alias">(alias for <a href="#function-is-symmetrical"><code>is-symmetrical</code></a>)</span>
+    
+  </h2>
+
+  
+
+</section>
+    
+      
       <section class="sassdoc__item" id="function-is-symmetrical">
   <h2 class="sassdoc__item-name">
     
     <code>is-symmetrical</code>
 
+    
+      <span class="sassdoc__item-alias">(aliased as 
+      
+        <a href="#function-is-mirror"><code>is-mirror</code></a>
+      
+      )</span>
     
 
     
@@ -1547,6 +1674,110 @@
 </section>
     
       
+      <section class="sassdoc__item" id="function-luck">
+  <h2 class="sassdoc__item-name">
+    
+    <code>luck</code>
+
+    
+
+    
+  </h2>
+
+  
+
+    
+    
+    <pre class="sassdoc__item-code"><code class="language-scss">@function luck () { ... }</code></pre>
+
+    
+
+    
+
+    
+
+    <h3>Parameters</h3>
+    
+      <p>None.</p>
+    
+
+    
+
+    
+
+    
+      <h3>Requires</h3>
+      
+        <ul class="sassdoc__item-requires">
+        <li><a href="#function-random-value"><code>random-value</code></a></li>
+        </ul>
+      
+    
+
+    
+
+    
+
+    
+
+    
+
+  
+
+</section>
+    
+      
+      <section class="sassdoc__item  sassdoc__item--alias" id="function-merge">
+  <h2 class="sassdoc__item-name">
+    
+    <code>merge</code>
+
+    
+
+    
+      <span class="sassdoc__item-alias">(alias for <a href="#function-union"><code>union</code></a>)</span>
+    
+  </h2>
+
+  
+
+</section>
+    
+      
+      <section class="sassdoc__item  sassdoc__item--alias" id="function-mirror">
+  <h2 class="sassdoc__item-name">
+    
+    <code>mirror</code>
+
+    
+
+    
+      <span class="sassdoc__item-alias">(alias for <a href="#function-reverse"><code>reverse</code></a>)</span>
+    
+  </h2>
+
+  
+
+</section>
+    
+      
+      <section class="sassdoc__item  sassdoc__item--alias" id="function-order">
+  <h2 class="sassdoc__item-name">
+    
+    <code>order</code>
+
+    
+
+    
+      <span class="sassdoc__item-alias">(alias for <a href="#function-sort"><code>sort</code></a>)</span>
+    
+  </h2>
+
+  
+
+</section>
+    
+      
       <section class="sassdoc__item" id="function-prepend">
   <h2 class="sassdoc__item-name">
     
@@ -1659,6 +1890,12 @@
     
     <code>purge</code>
 
+    
+      <span class="sassdoc__item-alias">(aliased as 
+      
+        <a href="#function-clean"><code>clean</code></a>
+      
+      )</span>
     
 
     
@@ -1827,6 +2064,17 @@
     
 
     
+      <h3>Used by</h3>
+      
+        <ul class="sassdoc__item-usedby">
+        <li><a href="#function-roll"><code>roll</code></a></li>
+        
+      
+        
+        <li><a href="#function-luck"><code>luck</code></a></li>
+        </ul>
+      
+    
 
     
 
@@ -1839,11 +2087,34 @@
 </section>
     
       
+      <section class="sassdoc__item  sassdoc__item--alias" id="function-randomize">
+  <h2 class="sassdoc__item-name">
+    
+    <code>randomize</code>
+
+    
+
+    
+      <span class="sassdoc__item-alias">(alias for <a href="#function-shuffle"><code>shuffle</code></a>)</span>
+    
+  </h2>
+
+  
+
+</section>
+    
+      
       <section class="sassdoc__item" id="function-remove">
   <h2 class="sassdoc__item-name">
     
     <code>remove</code>
 
+    
+      <span class="sassdoc__item-alias">(aliased as 
+      
+        <a href="#function-without"><code>without</code></a>
+      
+      )</span>
     
 
     
@@ -1952,6 +2223,12 @@
     <code>remove-duplicates</code>
 
     
+      <span class="sassdoc__item-alias">(aliased as 
+      
+        <a href="#function-unique"><code>unique</code></a>
+      
+      )</span>
+    
 
     
   </h2>
@@ -2044,6 +2321,12 @@
     
     <code>remove-nth</code>
 
+    
+      <span class="sassdoc__item-alias">(aliased as 
+      
+        <a href="#function-without-nth"><code>without-nth</code></a>
+      
+      )</span>
     
 
     
@@ -2421,11 +2704,34 @@
 </section>
     
       
+      <section class="sassdoc__item  sassdoc__item--alias" id="function-rest">
+  <h2 class="sassdoc__item-name">
+    
+    <code>rest</code>
+
+    
+
+    
+      <span class="sassdoc__item-alias">(alias for <a href="#function-tail"><code>tail</code></a>)</span>
+    
+  </h2>
+
+  
+
+</section>
+    
+      
       <section class="sassdoc__item" id="function-reverse">
   <h2 class="sassdoc__item-name">
     
     <code>reverse</code>
 
+    
+      <span class="sassdoc__item-alias">(aliased as 
+      
+        <a href="#function-mirror"><code>mirror</code></a>
+      
+      )</span>
     
 
     
@@ -2510,11 +2816,93 @@
 </section>
     
       
+      <section class="sassdoc__item" id="function-roll">
+  <h2 class="sassdoc__item-name">
+    
+    <code>roll</code>
+
+    
+
+    
+  </h2>
+
+  
+
+    
+    
+    <pre class="sassdoc__item-code"><code class="language-scss">@function roll () { ... }</code></pre>
+
+    
+
+    
+
+    
+
+    <h3>Parameters</h3>
+    
+      <p>None.</p>
+    
+
+    
+
+    
+
+    
+      <h3>Requires</h3>
+      
+        <ul class="sassdoc__item-requires">
+        <li><a href="#function-random-value"><code>random-value</code></a></li>
+        </ul>
+      
+    
+
+    
+
+    
+
+    
+
+    
+
+  
+
+</section>
+    
+      
+      <section class="sassdoc__item  sassdoc__item--alias" id="function-shift-indexes">
+  <h2 class="sassdoc__item-name">
+    
+    <code>shift-indexes</code>
+
+    
+      <span class="sassdoc__item-alias">(aliased as 
+      
+        <a href="#function-shift-indexes"><code>shift-indexes</code></a>
+      
+      )</span>
+    
+
+    
+      <span class="sassdoc__item-alias">(alias for <a href="#function-shift-indexes"><code>shift-indexes</code></a>)</span>
+    
+  </h2>
+
+  
+
+</section>
+    
+      
       <section class="sassdoc__item" id="function-shuffle">
   <h2 class="sassdoc__item-name">
     
     <code>shuffle</code>
 
+    
+      <span class="sassdoc__item-alias">(aliased as 
+      
+        <a href="#function-randomize"><code>randomize</code></a>
+      
+      )</span>
     
 
     
@@ -2746,6 +3134,12 @@
     <code>sort</code>
 
     
+      <span class="sassdoc__item-alias">(aliased as 
+      
+        <a href="#function-order"><code>order</code></a>
+      
+      )</span>
+    
 
     
   </h2>
@@ -2975,6 +3369,23 @@
 </section>
     
       
+      <section class="sassdoc__item  sassdoc__item--alias" id="function-stringify">
+  <h2 class="sassdoc__item-name">
+    
+    <code>stringify</code>
+
+    
+
+    
+      <span class="sassdoc__item-alias">(alias for <a href="#function-to-string"><code>to-string</code></a>)</span>
+    
+  </h2>
+
+  
+
+</section>
+    
+      
       <section class="sassdoc__item" id="function-sum">
   <h2 class="sassdoc__item-name">
     
@@ -3081,6 +3492,12 @@
     <code>tail</code>
 
     
+      <span class="sassdoc__item-alias">(aliased as 
+      
+        <a href="#function-rest"><code>rest</code></a>
+      
+      )</span>
+    
 
     
   </h2>
@@ -3169,6 +3586,12 @@
     
     <code>to-string</code>
 
+    
+      <span class="sassdoc__item-alias">(aliased as 
+      
+        <a href="#function-stringify"><code>stringify</code></a>
+      
+      )</span>
     
 
     
@@ -3264,11 +3687,34 @@
 </section>
     
       
+      <section class="sassdoc__item  sassdoc__item--alias" id="function-unfold">
+  <h2 class="sassdoc__item-name">
+    
+    <code>unfold</code>
+
+    
+
+    
+      <span class="sassdoc__item-alias">(alias for <a href="#function-flatten"><code>flatten</code></a>)</span>
+    
+  </h2>
+
+  
+
+</section>
+    
+      
       <section class="sassdoc__item" id="function-union">
   <h2 class="sassdoc__item-name">
     
     <code>union</code>
 
+    
+      <span class="sassdoc__item-alias">(aliased as 
+      
+        <a href="#function-merge"><code>merge</code></a>
+      
+      )</span>
     
 
     
@@ -3351,6 +3797,23 @@
     
 
     
+
+  
+
+</section>
+    
+      
+      <section class="sassdoc__item  sassdoc__item--alias" id="function-unique">
+  <h2 class="sassdoc__item-name">
+    
+    <code>unique</code>
+
+    
+
+    
+      <span class="sassdoc__item-alias">(alias for <a href="#function-remove-duplicates"><code>remove-duplicates</code></a>)</span>
+    
+  </h2>
 
   
 
@@ -3476,6 +3939,40 @@
     
 
     
+
+  
+
+</section>
+    
+      
+      <section class="sassdoc__item  sassdoc__item--alias" id="function-without">
+  <h2 class="sassdoc__item-name">
+    
+    <code>without</code>
+
+    
+
+    
+      <span class="sassdoc__item-alias">(alias for <a href="#function-remove"><code>remove</code></a>)</span>
+    
+  </h2>
+
+  
+
+</section>
+    
+      
+      <section class="sassdoc__item  sassdoc__item--alias" id="function-without-nth">
+  <h2 class="sassdoc__item-name">
+    
+    <code>without-nth</code>
+
+    
+
+    
+      <span class="sassdoc__item-alias">(alias for <a href="#function-remove-nth"><code>remove-nth</code></a>)</span>
+    
+  </h2>
 
   
 
@@ -3640,5 +4137,6 @@
 
     </div>
   </div>
+  <script src="assets/js/prism.min.js"></script>
 </body>
 </html>

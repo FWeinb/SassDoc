@@ -18,6 +18,7 @@
   @return $result;
 }
 
+// @requires remove-duplicates
 // @alias remove-duplicates
 
 @function unique($list, $recursive: false) {

@@ -17,6 +17,7 @@
   @return nth($list, 1);
 }
 
+// @requires first
 // @alias first
 
 @function head($list) {

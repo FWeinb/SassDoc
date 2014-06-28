@@ -13,6 +13,7 @@
   @return replace($list, $value, null);
 }
 
+// @requires remove
 // @alias remove
 
 @function without($list, $value) {

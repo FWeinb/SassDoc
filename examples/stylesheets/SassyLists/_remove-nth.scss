@@ -13,6 +13,7 @@
   @return replace-nth($list, $index, "");
 }
 
+// @requires remove-nth
 // @alias remove-nth
 
 @function without-nth($list, $index) {

@@ -18,12 +18,14 @@
 }
 
 // @alias random-value
+// @requires random-value
 
 @function roll($list) {
   @return random-value($list);
 }
 
 // @alias random-value
+// @requires random-value
 
 @function luck($list) {
   @return random-value($list);

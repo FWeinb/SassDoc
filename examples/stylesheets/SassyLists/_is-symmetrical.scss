@@ -12,6 +12,7 @@
   @return $list == reverse($list);
 }
 
+// @requires is-symmetrical
 // @alias is-symmetrical
 
 @function is-mirror($list) {

@@ -19,6 +19,7 @@
   @return quote(str-slice($result, 1, str-length($glue) * -1 - 1));
 }
 
+// @requires to-string
 // @alias to-string
 
 @function stringify($list, $glue: '') {
