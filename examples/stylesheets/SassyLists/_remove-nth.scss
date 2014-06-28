@@ -1,4 +1,4 @@
-// Removes value from `$list` at index `$index`
+// Removes value from `$list` at index `$index`.
 //
 // @ignore Documentation: http://sassylists.com/documentation/#remove-nth
 //
@@ -13,7 +13,6 @@
   @return replace-nth($list, $index, "");
 }
 
-// @requires remove-nth
 // @alias remove-nth
 
 @function without-nth($list, $index) {

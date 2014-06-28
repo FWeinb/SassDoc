@@ -1,4 +1,4 @@
-// Removes all false and null values from `$list`
+// Removes all false and null values from `$list`.
 //
 // @ignore Documentation: http://sassylists.com/documentation.html#purge
 //
@@ -20,7 +20,6 @@
   @return $result;
 }
 
-// @requires purge
 // @alias purge
 
 @function clean($list) {

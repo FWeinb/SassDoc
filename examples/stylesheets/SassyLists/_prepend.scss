@@ -1,11 +1,11 @@
-// Adds `$value` as first index of `$list`
+// Adds `$value` as first index of `$list`.
 //
 // @ignore Documentation: http://sassylists.com/documentation/#prepend
 //
 // @requires is-true
 //
-// @param {List}    $list  - list to preprend value to
-// @param {*}       $value - value to prepend to the list
+// @param {List} $list  - list to preprend value to
+// @param {*}    $value - value to prepend to the list
 //
 // @return {List}
 
@@ -17,11 +17,4 @@
   @else {
     @return $list;
   }
-}
-
-// @requires prepend
-// @alias prepend
-
-@function unshift($list, $value) {
-  @return prepend($list, $value);
 }

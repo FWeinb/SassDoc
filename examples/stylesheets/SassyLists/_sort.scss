@@ -1,4 +1,4 @@
-// Sorts values of `$list` using quick-sort algorithm respecting `$order`
+// Sorts values of `$list` using quick-sort algorithm.
 //
 // @ignore Documentation: http://sassylists.com/documentation/#sort
 //
@@ -33,7 +33,6 @@
   @return $list;
 }
 
-// @requires sort
 // @alias sort
 
 @function order($list) {

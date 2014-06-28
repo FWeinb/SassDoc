@@ -1,4 +1,4 @@
-// Returns `$list` as a string
+// Returns `$list` as a string, prettified if `$pre` is `true`.
 //
 // @ignore Documentation: http://sassylists.com/documentation/#debug
 //
@@ -72,7 +72,7 @@
 
 // Mixin displaying clean debug
 //
-// @param {List} $list - list to debug
+// @param {List} $list - list
 //
 // @requires {function} debug
 

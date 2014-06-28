@@ -1,8 +1,8 @@
-// Reverse the order of `$list`
+// Reverses the order of `$list`.
 //
 // @ignore Documentation: http://sassylists.com/documentation/#reverse
 //
-// @param {List} $list - list to revers
+// @param {List} $list - list to reverse
 //
 // @return {List}
 
@@ -23,7 +23,6 @@
   @return $list;
 }
 
-// @requires reverse
 // @alias reverse
 
 @function mirror($list) {

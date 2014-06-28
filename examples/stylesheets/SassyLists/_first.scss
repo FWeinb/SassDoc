@@ -1,4 +1,4 @@
-// Returns first element of `$list`
+// Returns first element of `$list`.
 //
 // @ignore Documentation: http://sassylists.com/documentation/#first
 //
@@ -17,7 +17,6 @@
   @return nth($list, 1);
 }
 
-// @requires first
 // @alias first
 
 @function head($list) {

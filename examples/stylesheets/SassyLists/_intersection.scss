@@ -1,8 +1,8 @@
-// Returns a list of shared value from `$list` and `$lists` minus duplicates
-//
-// @since 0.4.0
+// Returns a list of shared value from `$list` and `$lists` minus duplicates.
 //
 // @ignore Documentation: http://sassylists.com/documentation/#intersection
+//
+// @requires remove-duplicates
 //
 // @param {List}    $list  - first list
 // @param {ArgList} $lists - other lists

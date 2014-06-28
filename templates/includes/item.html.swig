@@ -1,4 +1,4 @@
-<section class="sassdoc__item  {% if item.alias %}sassdoc__item--alias{% endif %}" id="{{ item.type }}-{{ item.name }}">
+<section class="sassdoc__item{% if item.alias %}  sassdoc__item--alias{% endif %}" id="{{ item.type }}-{{ item.name }}">
   <h2 class="sassdoc__item-name">
     {% if item.deprecated %}
       <span class="sassdoc__item-deprecated" title="{{ item.deprecated }}">[Deprecated]</span>
@@ -38,7 +38,7 @@
         {% set parameters_string = parameters_string + ', ' + value %}
       {% endif %}
     {% endfor %}
-    <pre class="sassdoc__item-code">@{{ item.type }} {{ item.name }} ({{ parameters_string }}) { ... }  </pre>
+    <pre class="sassdoc__item-code"><code class="language-scss">@{{ item.type }} {{ item.name }} ({{ parameters_string }}) { ... }</code></pre>
 
     {% if item.description %}
       <h3>Description</h3>

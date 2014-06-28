@@ -1,6 +1,4 @@
-// Returns a list of values from `$lists` minus duplicates
-//
-// @since 0.3.0
+// Returns a list of values from `$lists` minus duplicates.
 //
 // @ignore Documentation: http://sassylists.com/documentation/#union
 //
@@ -16,7 +14,6 @@
   @return if(length($result) == 1, nth($result, 1), $result);
 }
 
-// @requires union
 // @alias union
 
 @function merge($lists...) {

@@ -1,14 +1,15 @@
-// Replaces value at `$index` from `$list` by $value
+// Replaces value at `$index` from `$list` by `$value`.
 //
 // @ignore Documentation: http://sassylists.com/documentation/#replace-nth
 //
 // @requires purge
+// @requires is-true
 //
 // @param {List}   $list  - list to update
 // @param {Number} $index - index to update
 // @param {*}      $value - new value for index
 //
-// @throws Invalid index `$index` for `replace-nth`.
+// @throws Invalid index $index for `replace-nth`.
 //
 // @return {List | Bool}
 

@@ -1,6 +1,4 @@
-// Shuffle `$list` using Fisher-Yates method
-//
-// @since 0.4.9
+// Shuffle `$list` using Fisher-Yates method.
 //
 // @ignore Documentation: http://sassylists.com/documentation/#shuffle
 //
@@ -24,7 +22,6 @@
   @return $list;
 }
 
-// @requires shuffle
 // @alias shuffle
 
 @function randomize($list) {

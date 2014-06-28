@@ -1,4 +1,4 @@
-// Returns the tail of `$list`: all items except the first (head)
+// Returns the tail of `$list`: all items except the first (head).
 //
 // @ignore Documentation: http://sassylists.com/documentation/#tail
 //
@@ -12,7 +12,6 @@
   @return slice($list, 2);
 }
 
-// @requires tail
 // @alias tail
 
 @function rest($list) {

@@ -1,10 +1,10 @@
-// Compares two values based on alphabetical order
+// Compares `$a` and `$b` based on `$order`.
 //
 // @access private
 //
-// @param {*}       $a      - first value
-// @param {*}       $b      - second value
-// @param {List}    $matrix - alphabetical order
+// @param {*}    $a     - first value
+// @param {*}    $b     - second value
+// @param {List} $order - order
 //
 // @return {Bool}
 
