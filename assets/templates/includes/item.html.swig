@@ -105,6 +105,15 @@
       {% endfor %}
     {% endif %}
 
+    {% if item.usedBy.length > 0 %}
+      <h3>Used by</h3>
+      {% for usedby in item.usedBy %}
+        {% if loop.first %}<ul class="sassdoc__item-usedby">{% endif %}
+        <li><a href="#{{ usedby.type }}-{{ usedby.item }}"><code>{{ usedby.item }}</code></a></li>
+        {% if loop.last %}</ul>{% endif %}
+      {% endfor %}
+    {% endif %}
+
     {% if item.todo.length > 0 %}
       <h3>TODO's</h3>
       {% for _todo in item.todo %}
