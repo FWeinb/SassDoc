@@ -7,24 +7,24 @@ SassDoc. Like JSDoc, but for Sass files.
 ### Function/mixin
 
 ```scss
-// Function description
-// ... on several lines if you will
-// ---
-// @access private
-// ---
-// @alias other-function
-// ---
-// @requires dependency-function
-// ---
-// @param {*}       $parameter-name            - description of the parameter
-// @param {String}  $other-parameter (default) - parameter with a default value
-// @param {ArgList} $args                      - extra parameters
-// ---
-// @throws `$other-parameter` must be a string.
-// ---
-// @return {String | Null} description of the returned value
+// Adds `$value` at `$index` in `$list`.
+//
+// @author Hugo Giraudel
+//
+// @ignore Documentation: http://sassylists.com/documentation/#insert-nth
+//
+// @requires is-true
+//
+// @param {List}   $list  - list to update
+// @param {Number} $index - index to add
+// @param {*}      $value - value to add
+//
+// @throws List index $index is not a number for `insert-nth`.
+// @throws List index $index must be a non-zero integer for `insert-nth`.
+//
+// @return {List | Bool}
 
-@function dummy-function($parameter-name, $other-parameter: 'default', $args...) {
+@function insert-nth($list, $index, $value) {
   // ...
 }
 ```
@@ -38,9 +38,7 @@ $legacy-support: true !global;
 
 ### Preview
 
-![SassDoc](http://i.imgur.com/GnNo4HB.png)
-
-*Note: it works exactly the same with mixins.*
+![SassDoc](http://i.imgur.com/cio7F8U.png)
 
 ## Installation
 
@@ -76,7 +74,7 @@ sassdoc.parse(__dirname + '/sass').then(function (items) {
 })
 ```
 
-Yielding a result like this:
+Yielding an object like this:
 
 ```js
 {
@@ -89,34 +87,35 @@ Yielding a result like this:
 Where a function/mixin is like this:
 
 ```js
-[
-  {
-    'parameters': [
-      { 'type': '*', 'name': 'parameter-name', 'default': undefined, 'description': 'description of the parameter' },
-      { 'type': 'String', 'name': 'other-parameter', 'default': 'default', 'description': 'parameter with a default value' },
-      { 'type': 'ArgList', 'name': 'args', 'default': undefined, 'description': 'extra parameters' }
+{
+  'parameters': [
+    { 'type': 'List',   'name': 'list',  'default': undefined, 'description': 'list to update' },
+    { 'type': 'Number', 'name': 'index', 'default': undefined, 'description': 'index to add'   },
+    { 'type': '*',      'name': 'value', 'default': undefined, 'description': 'value to add'   }
+  ],
+  'throws': [
+    'List index $index is not a number for `insert-nth`.', 
+    'List index $index must be a non-zero integer for `insert-nth`.'
+  ],
+  'alias': false,
+  'aliased': [],
+  'links': [],
+  'todos': [],
+  'requires': ['is-true'],
+  'description': 'Adds `$value` at `$index` in `$list`.',
+  'access': 'public',
+  'deprecated': false,
+  'author': "Hugo Giraudel",
+  'returns': {
+    'type': [
+      'List', 
+      'Bool'
     ],
-    'throws': ['`$other-parameter` must be a string.'],
-    'todos': [],
-    'alias': false,
-    'aliased': 'other-function',
-    'links': [],
-    'requires': ['dependency-function'],
-    'description': 'Function description\n... on several lines if you will',
-    'access': 'private',
-    'deprecated': false,
-    'author': false,
-    'returns': {
-      'type': ['String', 'Null'],
-      'description': 'description of the returned value'
-    },
-    'type': 'function',
-    'name': 'dummy-function'
-  }
-  /*,
-    ... other documented mixins/functions.
-  */
-]
+    'description': ''
+  },
+  'type': 'function',
+  'name': 'insert-nth'
+}
 ```
 
 And a variable like this:
