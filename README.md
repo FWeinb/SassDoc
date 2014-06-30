@@ -151,14 +151,6 @@ Defines the access of the documented function/mixin. None is considered `@access
 // @access protected
 ```
 
-It is also possible to define access like this:
-
-```scss
-// @private
-// @public
-// @protected
-```
-
 ### @alias
 
 Defines if the documented function/mixin is an alias of another function.
@@ -186,6 +178,8 @@ Defines if the documented documented function/mixin is deprecated. Message is op
 // @deprecated Deprecation related message
 ```
 
+Message is parsed in markdown.
+
 ### @ignore
 
 Defines a line which won't be documented. Multiple `@ignore` allowed on the same function/mixin.
@@ -193,6 +187,8 @@ Defines a line which won't be documented. Multiple `@ignore` allowed on the same
 ```scss
 // @ignore Message
 ```
+
+Message is parsed in markdown.
 
 ### @link
 
@@ -215,6 +211,8 @@ Describes a parameter of the documented function/mixin. Default value and descri
 
 Type is any of: `arglist`, `bool`, `color`, `list`, `map`, `null`, `number`, `string` or `*` when any type is allowed. Case insensitive.
 
+Description is parsed in markdown.
+
 ### @requires
 
 Defines if the documented function/mixin requires any other function/mixin. Multiple `@requires` allowed on the same function/mixin.
@@ -234,6 +232,8 @@ Describes the return statement of the documented function/mixin. Description is 
 // @returns {type} Description of the return statement
 ```
 
+Description is parsed in markdown.
+
 Type is one of: `arglist`, `bool`, `color`, `list`, `map`, `null`, `number`, `string` or `*` when any type is allowed. Case insensitive.
 
 ### @since
@@ -244,6 +244,8 @@ Describes the version at which the documented function/mixin has been implemente
 // @since 4.2
 ```
 
+Description is parsed in markdown.
+
 ### @throws (synonym: @exception)
 
 Describes the error thrown by the documented function/mixin. Multiple `@throws` allowed on the same function/mixin.
@@ -252,6 +254,8 @@ Describes the error thrown by the documented function/mixin. Multiple `@throws` 
 // @throws Error related message
 ```
 
+Message is parsed in markdown.
+
 ### @todo
 
 Defines any task to do regarding the documented function/mixin. Multiple `@todo` allowed on the same function/mixin.
@@ -259,6 +263,8 @@ Defines any task to do regarding the documented function/mixin. Multiple `@todo`
 ```scss
 // @todo Task to be done
 ```
+
+Message is parsed in markdown.
 
 ### @var
 
@@ -270,6 +276,8 @@ $legacy-support: true !global;
 ```
 
 Scope is defined by the (lack of) use of `!global`. 
+
+Description is parsed in markdown.
 
 ## Credits
 
