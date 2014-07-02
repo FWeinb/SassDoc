@@ -1,3 +1,5 @@
+{% if item.access | lower != "private" %}
+
 <section class="sassdoc__item{% if item.alias %}  sassdoc__item--alias{% endif %}" id="{{ item.type }}-{{ item.name }}">
   <h2 class="sassdoc__item-name">
     {% if item.deprecated %}
@@ -43,11 +45,6 @@
     {% if item.description %}
       <h3>Description</h3>
       <p class="sassdoc__item-description">{{ item.description | replace('\n', '<br />') | markdown }}</p>
-    {% endif %}
-
-    {% if item.access and item.access | lower != "public" %}
-      <h3>Access</h3>
-      <p class="sassdoc__item-access">{{ item.access }}</p>
     {% endif %}
 
     {% if item.since %}
@@ -157,3 +154,5 @@
   {% endif %}
 
 </section>
+
+{% endif %}

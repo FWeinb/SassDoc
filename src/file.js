@@ -265,6 +265,7 @@ exports = module.exports = {
 
       // If @alias maps to a valid item, update aforesaid item
       if (utils.isset(data.index[item.alias])) {
+        data.index[name].access = data.index[item.alias].access;
 
         // If `aliased` key doesn't exist yet, create it
         if (!utils.isset(data.index[item.alias].aliased)) {

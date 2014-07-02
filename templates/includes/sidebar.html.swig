@@ -2,10 +2,14 @@
 <div class="sassdoc__map-container">
 <ul>
 {% for type, obj in data %}
-  <li class="sassdoc__map-section"><a href="#{{ type }}">{{ type | capitalize }}</a></li>
-  {% for item in obj %}
-      <li><a href="#{{ item.type }}-{{ item.name }}">{{ item.name }}</a></li>
-  {% endfor %}
+  {% if obj.length > 0 %}
+    <li class="sassdoc__map-section"><a href="#{{ type }}">{{ type | capitalize }}</a></li>
+    {% for item in obj %}
+      {% if item.access | lower != "private" %}
+        <li><a href="#{{ item.type }}-{{ item.name }}">{{ item.name }}</a></li>
+      {% endif %}
+    {% endfor %}
+  {% endif %}
 {% endfor %}
 </ul>
 </div>

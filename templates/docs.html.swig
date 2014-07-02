@@ -2,12 +2,14 @@
 
 {% block content %}
   {% for type, obj in data %}
-    <h1 class="sassdoc__section" id="{{ type }}">{{ type | capitalize }}</h1>
-    {% for item in obj %}
-      {% set partial = "includes/" + type + ".html.swig" %}
-      {% include partial with item %}
+    {% if obj.length > 0 %}
+      <h1 class="sassdoc__section" id="{{ type }}">{{ type | capitalize }}</h1>
+      {% for item in obj %}
+        {% set partial = "includes/" + type + ".html.swig" %}
+        {% include partial with item %}
+      {% endfor %}
     {% endfor %}
-  {% endfor %}
+  {% endif %}
 {% endblock %}
 
 {% block sidebar %}
