@@ -507,7 +507,7 @@ exports = module.exports = {
    * @param {String} type
    */
   isValidType: function (type) {
-    return ['*', 'arglist', 'bool', 'color', 'list', 'map', 'null', 'number', 'string'].indexOf(type.toLowerCase()) !== -1;
+    return ['*', 'arglist', 'bool', 'color', 'list', 'map', 'null', 'number', 'spritemap', 'string'].indexOf(type.toLowerCase()) !== -1;
   },
 
   /**
