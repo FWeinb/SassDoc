@@ -345,10 +345,11 @@ exports = module.exports = {
    * Capture deprecated
    */
   captureDeprecated: function () {
-    if (this.current() === '@') {
-      this.item.deprecated = '';
+    if (this.current() === '@' || this.current() === '$') {
+      this.item.deprecated = true;
       this.previous();
     }
+
     else {
       this.item.deprecated = this.consume(LINE_BREAK);
     }
@@ -429,22 +430,22 @@ exports = module.exports = {
    * Capture a link
    */
   captureLink: function () {
-    var label, link = {};
+    var caption, link = {};
 
     // Get url
     link.url = this.consume([SPACE, TAB, LINE_BREAK]).trim();
     this.trim();
 
-    // If there is a label, get the label
+    // If there is a caption, get the caption
     if (this.current() !== '@') {
-      label = this.consume(LINE_BREAK);
+      caption = this.consume(LINE_BREAK);
     }
     // If we've already jumped line, roll back
     else {
       this.previous();
     }
 
-    link.label = (label || link.url).trim();
+    link.caption = (caption || link.url).trim();
 
     // Push the whole thing
     if (typeof this.item.links === 'undefined') {

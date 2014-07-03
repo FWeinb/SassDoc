@@ -4,7 +4,9 @@
 //
 // @param {List}   $list - list to chunk
 // @param {Number} $size - length of lists
-//
+// 
+// @deprecated
+// 
 // @throws `n` is not a number for `chunk`.
 //
 // @return {List | Bool}
