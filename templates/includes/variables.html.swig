@@ -1,3 +1,5 @@
+{% if item.access | lower != "private" %}
+
 <section class="sassdoc__item" id="variable-{{ item.name }}">
 
   <h2 class="sassdoc__item-name">
@@ -28,3 +30,5 @@
   {% endif %}
 
 </section>
+
+{% endif %}

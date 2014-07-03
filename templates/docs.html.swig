@@ -1,14 +1,20 @@
 {% extends 'layouts/base.html.swig' %}
 
 {% block content %}
-  {% for type, obj in data %}
-    {% if obj.length > 0 %}
-      <h1 class="sassdoc__section" id="{{ type }}">{{ type | capitalize }}</h1>
-      {% for item in obj %}
-        {% set partial = "includes/" + type + ".html.swig" %}
-        {% include partial with item %}
-      {% endfor %}
+  {% if data.functions.length === 0 and data.mixins.length === 0 and data.variables.length === 0 %}
+    <h1 class="sassdoc__section  no-counter">Seems like nothing has been documented yet!</h1>
+  {% else %}
+
+   {% for type, obj in data %}
+      {% if obj.length > 0 %}
+        <h1 class="sassdoc__section" id="{{ type }}">{{ type | capitalize }}</h1>
+        {% for item in obj %}
+          {% set partial = "includes/" + type + ".html.swig" %}
+          {% include partial with item %}
+        {% endfor %}
+      {% endif %}
     {% endfor %}
+
   {% endif %}
 {% endblock %}
 
